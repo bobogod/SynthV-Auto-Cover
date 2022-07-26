@@ -1,6 +1,6 @@
 function getClientInfo() {
   return {
-    "name" : "载入参数",
+    "name" : "载入音高",
     "author" : "無波",
     "versionNumber" : 1,
     "minEditorVersion" : 67073
@@ -22,9 +22,6 @@ function main() {
   
   var info = SV.getHostClipboard().split('\n');
   
-  const paramNames = ["tension","breathiness","voicing","gender","toneshift"];
-  var range_param=[[-1,1],[-1,1],[0.2,1],[-0.1,0.1],[-400,400]] //limited gender
-  var params=[];
   var onset = SV.getProject().getTimeAxis().getBlickFromSeconds(SV.getPlayback().getPlayhead());  
   var noteGroup = SV.getMainEditor().getCurrentTrack().getGroupReference(0).getTarget();
   /*for (count=0;count<N_sample;count++){
@@ -51,13 +48,11 @@ function main() {
 		  info[i][j]=parseFloat(info[i][j]);		  
 	  }
   }
-  for (i=0;i<5;i++){
-	  var targetParam = noteGroup.getParameter(paramNames[i]);
-	  targetParam.remove(onset,onset+s_blick(info[info.length-1][5]));
-	  for (j=0;j<info.length;j++){
-		  targetParam.add(onset+s_blick(info[j][5]),info[j][i]);
-	  }
+  var targetParam = noteGroup.getParameter("pitchdelta");
+  targetParam.removeAll();
+  for (j=0;j<info.length;j++){
+	targetParam.add(s_blick(info[j][0]),info[j][1]);
   }
-  //SV.showMessageBox("onset",onset);
-  //SV.showMessageBox("l",info[info.length-1].length);
+  SV.showMessageBox("0,0",info[0][0]);
+  SV.showMessageBox("0,1",info[0][1]);
 }
