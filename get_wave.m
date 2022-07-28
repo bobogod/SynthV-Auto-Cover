@@ -1,7 +1,7 @@
 close all
 
 %% load wav
-[x,fs]=audioread('bigfish.wav');
+[x,fs]=audioread('wings.wav');
 bin=0.1; %100ms*2 bin for fft
 step=0.01; %calc every 10ms
 L=(bin*2)*fs+1; %length of each bin
@@ -12,7 +12,7 @@ power=log10(x(:,1).^2+1);
 
 
 %% load midi
-mid=readmidi("bigfish.mid");
+mid=readmidi("wings.mid");
 mid(:,4)=261.6*2.^((mid(:,4)-60)/12);
 for i=2:length(x)
     if power(i)>3e-4 && power(i-1)<3e-4
@@ -30,7 +30,7 @@ f=fs*(0:(L/2))/L;
 
 i_tone=1;
 for i=timesteps
-    x_fft=fft(x((i-bin)*fs:(i+bin)*fs));
+    x_fft=fft(x(round((i-bin)*fs):round((i+bin)*fs)));
     t=abs(x_fft); t=t(1:round(L/2)+1); 
     
     
@@ -42,9 +42,9 @@ for i=timesteps
     end
     
     if abs(x(round(i*fs)))>0.0005
-        t_index=find(f>pitch_mid/1.1225 & f<pitch_mid*1.1225);
-        tt=t(f>pitch_mid/1.1225 & f<pitch_mid*1.1225);
-        tt=movmean(tt,3);
+        t_index=find(f>pitch_mid/1.2 & f<pitch_mid*1.2);
+        tt=t(f>pitch_mid/1.2 & f<pitch_mid*1.2);
+        tt=abs(tt)./abs(log2(t(t_index)./pitch_mid));
 %         [tt index]=maxk(t,10); %top 10 peaks
 %         index=index(tt>60 & tt<2500); %band-pass
         [ttt index]=max(tt); %peak with lowest frequency
@@ -61,9 +61,9 @@ for i=timesteps
 end
 
 F0(F0-mean(F0,'omitnan')>4*std(F0,'omitnan'))=NaN;
-F0=movmean(F0,3,'omitnan');
+F0=movmean(F0,5,'omitnan');
 
-%% tone with audio
+%% plot
 figure
 subplot(2,1,1)
 hold on
@@ -102,6 +102,7 @@ for i=1:length(F0)
     end
 end
 pitch_drift=movmean(pitch_drift,5);
+pitch_drift=pitch_drift/1.25;
 subplot(2,1,2)
 plot(timesteps,pitch_drift)
     
