@@ -8,6 +8,7 @@ All algorithms are based on SynthV-studio and Stardust Infinity.
 2. `train_*.ipynb` files are based on resnet18; `train34_*.ipynb` is based on resnet34.  
 3. `*_con` means this file use the second dataset only; `*_mix` means it uses both datasets.
 4. To put the generated parameters into SynthV, you need to copy all the context in the `param.txt` or `pitch.txt`, then the `load_*.js` scripts are able to transport these information from the clipboard to the software. You'd better use the simplification function since there may be too many data points for SynthV to synthesize vocal music.  
+5. There is a simply mixed demo covering the famous song "Invisible Wings" of Zhang Shaohan
 
 --------------------------------------------------
 # Discription of the algorithm
