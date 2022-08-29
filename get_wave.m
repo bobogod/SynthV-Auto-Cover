@@ -1,7 +1,7 @@
 close all
 
 %% load wav
-[x,fs]=audioread('hotel.wav');
+[x,fs]=audioread('aurora.wav');
 bin=0.1; %100ms*2 bin for fft
 step=0.01; %calc every 10ms
 L=(bin*2)*fs+1; %length of each bin
@@ -13,7 +13,7 @@ power=log10(x(:,1).^2+1);
 
 %% load midi
 
-mid=readmidi("hotel.mid");
+mid=readmidi("aurora.mid");
 mid(:,4)=261.6*2.^((mid(:,4)-60)/12);
 for i=2:length(x)
     if power(i)>3e-4 && power(i-1)<3e-4
@@ -21,8 +21,8 @@ for i=2:length(x)
         break;
     end
 end
-% midi_onset=mid(1,6);
-midi_onset=wave_onset;
+midi_onset=mid(1,6);
+% midi_onset=wave_onset;
 
 %% waveform with fft, according to midi
 x_fft=fft(x(1:2*bin*fs+1));
